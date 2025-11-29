@@ -2,15 +2,32 @@ import ExploreBtn from "@/components/ExploreBtn";
 import EventCard from "@/components/EventCard";
 import {IEvent} from "@/database";
 import {cacheLife} from "next/cache";
-import EventForm from "@/components/EventForm";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const Page = async () => {
     'use cache';
     cacheLife('hours')
-    const response = await fetch(`${BASE_URL}/api/events`);
-    const { events } = await response.json();
+    
+    let events: IEvent[] = [];
+    
+    try {
+        const response = await fetch(`${BASE_URL}/api/events`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        
+        if (!response.ok) {
+            throw new Error(`API responded with status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        events = data.events || [];
+    } catch (error) {
+        console.error('Failed to fetch events:', error);
+        events = [];
+    }
 
     return (
         <section>
@@ -27,14 +44,13 @@ const Page = async () => {
                             <EventCard 
                                 {...event}
                                 id={event._id?.toString()}
-                                showActions={true} 
                             />
                         </li>
                     ))}
                 </ul>
             </div>
             <div className="py-18 md:py-26 space-y-7" id="create-events">
-                <EventForm />
+                {/* Event creation moved to /dashboard */}
             </div>
             <div>
                 
