@@ -27,7 +27,7 @@ const eventSchema = new Schema<IEvent>(
       type: String,
       required: [true, 'Event title is required'],
       trim: true,
-      minlength: [100, 'Title must be at least 100 characters long'],
+      minlength: [3, 'Title must be at least 3 characters long'],
     },
     slug: {
       type: String,
@@ -38,7 +38,7 @@ const eventSchema = new Schema<IEvent>(
       type: String,
       required: [true, 'Event description is required'],
       trim: true,
-      minlength: [200, 'Description must be at least 200 characters long'],
+      minlength: [10, 'Description must be at least 10 characters long'],
     },
     overview: {
       type: String,
